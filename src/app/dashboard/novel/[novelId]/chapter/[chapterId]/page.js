@@ -79,7 +79,7 @@ export default function ChapterEditorPage({ params }) {
       content: content,
       order: 1, // Placeholder
       isPublished: isPublished,
-      novelId: params.novelId,
+      novelId: params.id,
     }
     if (isNew) {
       await createChapter(data)
@@ -87,7 +87,7 @@ export default function ChapterEditorPage({ params }) {
       await updateChapter(params.chapterId, data)
     }
     localStorage.removeItem(`draft-chapter-${params.chapterId}`)
-    router.push(`/dashboard/novel/${params.novelId}`)
+    router.push(`/dashboard/novel/${params.id}`)
   }
 
   return (
