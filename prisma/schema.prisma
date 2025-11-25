@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("reader") // reader or writer
+  createdAt DateTime @default(now())
+  novels    Novel[]
+}
+
+model Novel {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  genre       String?
+  isPublished Boolean   @default(false)
+  viewCount   Int       @default(0)
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  chapters    Chapter[]
+}
+
+model Chapter {
+  id          String   @id @default(cuid())
+  title       String
+  content     String? // Storing as String, can be JSON string
+  order       Int
+  isPublished Boolean  @default(false)
+  novel       Novel    @relation(fields: [novelId], references: [id])
+  novelId     String
+  createdAt   DateTime @default(now())
+}
